@@ -2,6 +2,7 @@ package com.example.batch4rest.Repositories;
 
 import com.example.batch4rest.Dtos.GetUserResponseDto;
 import com.example.batch4rest.Models.User;
+import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.RandomAccess;
 import java.util.random.RandomGenerator;
 
+@Repository
 public class UserRepository {
 
     HashMap<Integer, User> users = new HashMap<>();

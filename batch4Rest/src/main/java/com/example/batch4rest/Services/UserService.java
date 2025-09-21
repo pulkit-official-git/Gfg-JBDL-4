@@ -7,21 +7,27 @@ import com.example.batch4rest.Exceptions.UserNotFoundException;
 import com.example.batch4rest.Models.User;
 import com.example.batch4rest.Repositories.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Service
 public class UserService {
 
+    @Autowired
     private static UserRepository userRepository;
 
-    public ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    public ObjectMapper objectMapper;
 
-    public UserService() {
-        userRepository = new UserRepository();
-    }
+//    public UserService() {
+//        userRepository = new UserRepository();
+//    }
 
     public CreateUserResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
 
