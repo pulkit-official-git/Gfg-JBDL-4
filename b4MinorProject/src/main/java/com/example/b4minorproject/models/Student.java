@@ -30,6 +30,9 @@ public class Student {
     @Enumerated(EnumType.STRING)
     private StudentStatus status;
 
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
     @OneToMany(mappedBy = "student")
     private List<Book> books;
 

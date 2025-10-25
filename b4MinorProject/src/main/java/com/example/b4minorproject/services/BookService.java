@@ -30,4 +30,8 @@ public class BookService {
     public Book getBook(Integer id) {
         return this.bookRepository.findById(id).orElse(null);
     }
+
+    public Book save(Book book) {
+        return this.bookRepository.save(book);
+    }
 }
