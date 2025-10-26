@@ -26,8 +26,8 @@ public class Book {
 
     @ManyToOne
     @JoinColumn
-    @JsonIgnore
-//    @JsonIgnoreProperties("books")
+//    @JsonIgnore
+    @JsonIgnoreProperties("books")
     private Author author;
 
     @Column(nullable = false)
@@ -36,9 +36,12 @@ public class Book {
 
     @ManyToOne
     @JoinColumn
+    @JsonIgnoreProperties("books")
     private Student student;
 
     @OneToMany(mappedBy = "book")
+    @JsonIgnore
+//    @JsonIgnoreProperties("book")
     private List<Transaction> transactions;
 
     @CreationTimestamp

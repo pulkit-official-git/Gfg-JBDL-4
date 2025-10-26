@@ -25,6 +25,12 @@ public class TransactionService {
     @Value("${bookPerStudent}")
     Integer bookPerStudent;
 
+    @Value("${maxDaysLimit}")
+    Integer maxDaysLimit;
+
+    @Value("${finePerDay}")
+    Integer finePerDay;
+
 
     public String initiate(Integer bookId, Integer studentId, TransactionType txnType) throws Exception {
 
@@ -134,21 +140,37 @@ public class TransactionService {
 
         Transaction savedTransaction = this.transactionRepository.save(transaction);
 
-//        try{
-//            Integer fine = getFine(student,book);
-//        }
-        return "hello";
+        try{
+            Integer fine = getFine(student,book);
+            book.setStudent(null);
+            this.bookService.save(book);
+            transaction.setFine(fine);
+            transaction.setTransactionStatus(TransactionStatus.SUCCESS);
+            transaction=this.transactionRepository.save(transaction);
+        }catch (Exception e){
+            transaction.setTransactionStatus(TransactionStatus.FAILED);
+            transaction=this.transactionRepository.save(transaction);
+            if(book.getStudent()==null){
+                book.setStudent(student);
+                this.bookService.save(book);
+            }
+        }
+        return transaction.getTxnId();
 
     }
 
     private Integer getFine(Student student, Book book) {
-//        Transaction issuedTxn = this.transactionRepository.findTopByBookAndStudentAndTransactionTypeAndTransactionStatusOrderByIdDesc
-//                (book,student,TransactionType.ISSUANCE,TransactionStatus.SUCCESS);
-//
-//        Long issuedTimeInMillis = issuedTxn.getUpdatedOn().getTime();
-//        Long totalTimeDiffInMillis = System.currentTimeMillis()-issuedTimeInMillis;
-//
+        Transaction issuedTxn = this.transactionRepository.findTopByBookAndStudentAndTransactionTypeAndTransactionStatusOrderByIdDesc
+                (book,student,TransactionType.ISSUANCE,TransactionStatus.SUCCESS);
+
+        Long issuedTimeInMillis = issuedTxn.getUpdatedOn().getTime();
+        Long totalTimeDiffInMillis = System.currentTimeMillis()-issuedTimeInMillis;
+
 //        Long days = TimeUnit.MILLISECONDS.toDays(totalTimeDiffInMillis);
+        Long daysPassed =  TimeUnit.DAYS.convert(totalTimeDiffInMillis, TimeUnit.MILLISECONDS);
+        if(daysPassed>this.maxDaysLimit){
+            return (daysPassed.intValue()-this.maxDaysLimit)*this.finePerDay;
+        }
         return 0;
     }
 }

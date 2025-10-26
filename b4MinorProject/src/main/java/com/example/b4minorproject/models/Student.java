@@ -1,6 +1,7 @@
 package com.example.b4minorproject.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,9 +35,11 @@ public class Student {
     private Gender gender;
 
     @OneToMany(mappedBy = "student")
+    @JsonIgnoreProperties("student")
     private List<Book> books;
 
     @OneToMany(mappedBy = "student")
+    @JsonIgnoreProperties("student")
     private List<Transaction> transactions;
 
     @CreationTimestamp
